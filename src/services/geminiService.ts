@@ -1,4 +1,4 @@
-import { GenerationType, GenerationResult } from '@/types'; // Korrigierter Pfad
+import { GenerationType } from '@/types'; // GenerationResult entfernt, da es in dieser Datei nicht direkt verwendet wird
 
 // Diese Funktionen rufen jetzt unsere eigene Next.js API Route auf
 const API_ROUTE_URL = '/api/gemini';
