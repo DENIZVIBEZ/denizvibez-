@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     if (type === "Music Concept" || type === "Video Script") {
       modelName = "gemini-pro";
-      const model = genAI.getGenerativeModel({ model: modelName });
+      const model = genAI.getGenerativeModel({ model: modelName }); // Model hier definieren, da es hier verwendet wird
       if (type === "Music Concept") {
         fullPrompt = `Generate a detailed music concept based on the following idea: "${prompt}". Include genre, mood, instrumentation, and a brief narrative.`;
       } else if (type === "Video Script") {
@@ -45,34 +45,37 @@ export async function POST(request: Request) {
     } else if (type === "Storyboard") {
       modelName = "gemini-pro-vision";
       console.warn("Image generation via Gemini-Pro-Vision is a placeholder. Consider a dedicated image generation API.");
-      const model = genAI.getGenerativeModel({ model: modelName });
+      const model = genAI.getGenerativeModel({ model: modelName }); // Model hier definieren, da es hier verwendet wird
       return NextResponse.json({ imageUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" });
     }
 
     return NextResponse.json({ error: 'Invalid generation type.' }, { status: 400 });
 
-  } catch (error: any) {
+  } catch (error: unknown) { // Typ von 'any' zu 'unknown' geändert
     console.error("API Route Error during content generation:", error);
 
     let errorMessage = 'An unexpected error occurred during generation.';
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (typeof error === 'object' && error !== null && 'message' in error) {
-      errorMessage = (error as any).message;
+      errorMessage = (error as { message: string }).message; // Typ-Assertion für den Zugriff auf 'message'
     } else if (typeof error === 'string') {
         errorMessage = error;
     }
 
-    if (error.response && error.response.status) {
-        errorMessage = `Gemini API Error: Status ${error.response.status}`;
-        if (error.response.data && error.response.data.error && error.response.data.error.message) {
-            errorMessage += ` - ${error.response.data.error.message}`;
+    // Zusätzliche Prüfungen für spezifische Fehlerobjekte, falls die API sie zurückgibt
+    const apiError = error as { response?: { status?: number; data?: { error?: { message?: string } } }; message?: string };
+
+    if (apiError.response && apiError.response.status) {
+        errorMessage = `Gemini API Error: Status ${apiError.response.status}`;
+        if (apiError.response.data && apiError.response.data.error && apiError.response.data.error.message) {
+            errorMessage += ` - ${apiError.response.data.error.message}`;
         }
-    } else if (error.message && error.message.includes("API key not valid")) {
+    } else if (apiError.message && apiError.message.includes("API key not valid")) {
         errorMessage = "Gemini API Error: API key not valid. Please check your .env.local file.";
-    } else if (error.message && error.message.includes("403 Forbidden")) {
+    } else if (apiError.message && apiError.message.includes("403 Forbidden")) {
         errorMessage = "Gemini API Error: 403 Forbidden. Check API key permissions or project settings.";
-    } else if (error.message && error.message.includes("429 Too Many Requests")) {
+    } else if (apiError.message && apiError.message.includes("429 Too Many Requests")) {
         errorMessage = "Gemini API Error: 429 Too Many Requests. You have exceeded your quota.";
     }
 

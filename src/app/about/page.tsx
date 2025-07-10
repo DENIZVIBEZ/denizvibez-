@@ -15,11 +15,11 @@ export default function AboutPage() {
           </p>
           <h2 className="text-3xl font-cinzel text-softgold pt-6 border-t border-white/10">Our Mission</h2>
           <p>
-            Our mission is to democratize high-end creative production. We provide filmmakers, musicians, marketers, and artists with a suite of AI-powered tools that feel both intuitive and magical. We strive to build a platform that is elegant, cinematic, and profoundly individual, allowing every user to create work that is uniquely their own. We are "BUILT BY AI. MADE TO FEEL."
+            Our mission is to democratize high-end creative production. We provide filmmakers, musicians, marketers, and artists with a suite of AI-powered tools that feel both intuitive and magical. We strive to build a platform that is elegant, cinematic, and profoundly individual, allowing every user to create work that is uniquely their own. We are &quot;BUILT BY AI. MADE TO FEEL.&quot;
           </p>
           <h2 className="text-3xl font-cinzel text-softgold pt-6 border-t border-white/10">Our Technology</h2>
           <p>
-            We leverage state-of-the-art generative models, including Google's Gemini and Imagen, to power our services. Our platform is built on a modern, scalable tech stack to ensure a seamless and responsive user experience. We are committed to pushing the boundaries of what's possible in AI-driven creative work while maintaining a focus on quality, ethics, and artistic integrity.
+            We leverage state-of-the-art generative models, including Google&apos;s Gemini and Imagen, to power our services. Our platform is built on a modern, scalable tech stack to ensure a seamless and responsive user experience. We are committed to pushing the boundaries of what&apos;s possible in AI-driven creative work while maintaining a focus on quality, ethics, and artistic integrity.
           </p>
         </div>
       </div>
